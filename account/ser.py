@@ -1,10 +1,10 @@
 from  rest_framework import serializers
-from .models import User
+from .models import User, Category, Product
 
 class U_SER(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['photo', 'username', 'password']
+        fields = ['id','photo', 'username', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -16,4 +16,18 @@ class U_SER(serializers.ModelSerializer):
 class User_Get(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['photo', 'username']
+        fields = ['id','photo', 'username']
+    
+# ---------------------------------------------------------------------------------------
+
+class Category_Ser(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id','name', 'photo', 'parent']
+# ---------------------------------------------------------------------------------------
+        
+class Product_Ser(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id','name', 'price', 'user', 'batafsil','created', 'updated']
+
