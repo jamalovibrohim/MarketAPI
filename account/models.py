@@ -25,13 +25,20 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.TextField()
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete = models.CASCADE, null = True, blank = True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE, null = True, blank = True)
     batafsil = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
 class Product_Images(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='Product_images/',  null=True, blank=True)
+
+
+
+#-------------------------------------------------------------------------------------
+# class Savat(models.Model):
+    
 
 # Create your models here.
