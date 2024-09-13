@@ -1,11 +1,39 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import permissions
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated,AllowAny, IsAuthenticatedOrReadOnly
 
 from .ser import U_SER,User_Get, Category_Ser, Product_Ser, ChangePasswordSer
 from .models import User, Category, Product
 
+class MyTokenView(APIView):
+    def post(self, request):
+        username = request.data['username']
+        password = request.data['password']
+        user = User.objects.filter(username=username).last()
+
+        if user:
+            if user.check_password(password):
+                tokens = RefreshToken.for_user(user=user)
+                message = {
+                    "refresh" : str(tokens),
+                    "access"  : str(tokens.access_token),
+                    "username": user.username,
+                    "user_id" : user.id,
+                    "status"  : user.status
+                }
+                return Response(message)
+            return Response({"message": "password xato"})
+        return Response({
+            "message" : "username yoki password da xatolik mavjud"
+        })
+
+# ---------------------------------------------------------------------------------------
+
 class UserCreateListView(ListCreateAPIView):
+    permission_classes = [AllowAny]
     queryset = User.objects.all()
     serializer_class = U_SER
 
